@@ -1,24 +1,30 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import { useQuery, gql } from "@apollo/client";
+import { useEffect } from "react";
 
+export type Launch = {
+  mission_name: string
+}
+
+const GET_DATA = gql`
+  query LaunchesPast($limit: Int = 10) {
+    launchesPast(limit: $limit) {
+      mission_name
+    }
+  }
+`;
 function App() {
+  const { loading, error, data } = useQuery(GET_DATA);
+  useEffect(() => {
+    console.log(loading, error, data);
+  });
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      {data
+        ? data.launchesPast.map((launch: Launch) => {
+            return <p>{launch.mission_name}</p>;
+          })
+        : null}
     </div>
   );
 }
