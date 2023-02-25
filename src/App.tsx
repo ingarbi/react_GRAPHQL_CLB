@@ -56,6 +56,7 @@ function App() {
   ] = useMutation(MUTATE_DATA, {
     refetchQueries: [{ query: GET_DATA }],
   });
+  
   useEffect(() => {
     console.log(loading, error, data);
     console.log(
